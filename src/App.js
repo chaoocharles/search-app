@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import ListPosts from "./components/ListPosts";
+import Search from "./components/Search";
 
-function App() {
+const App = () => {
+  const [keyword, setKeyword] = useState("");
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/posts/")
+      .then((response) => response.json())
+      .then((data) => setPosts(data));
+  }, [keyword]);
+  console.log(posts);
+  const filterPosts = () => {
+    const filteredPosts = posts.filter((post) => {
+      if (keyword === "") {
+        return post;
+      }
+
+      const newPost = post.title.toLowerCase().includes(keyword.toLowerCase());
+
+      return newPost;
+    });
+
+    setPosts(filteredPosts);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Search
+        keyword={keyword}
+        setKeyword={setKeyword}
+        filterPosts={filterPosts}
+      />
+      <ListPosts posts={posts} />
     </div>
   );
-}
+};
 
 export default App;
