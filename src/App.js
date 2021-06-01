@@ -1,30 +1,34 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
-import ListPosts from "./components/ListPosts";
+import ListCharacters from "./components/ListCharacters";
 import Search from "./components/Search";
+
+import "./App.css";
 
 const App = () => {
   const [keyword, setKeyword] = useState("");
-  const [posts, setPosts] = useState([]);
+  const [characters, setCharacters] = useState([]);
 
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts/")
+    fetch("https://rickandmortyapi.com/api/character")
       .then((response) => response.json())
-      .then((data) => setPosts(data));
+      .then((data) => setCharacters(data.results));
   }, [keyword]);
-  console.log(posts);
-  const filterPosts = () => {
-    const filteredPosts = posts.filter((post) => {
+
+  console.log(characters);
+  const filterCharacters = () => {
+    const filteredCharacters = characters.filter((character) => {
       if (keyword === "") {
-        return post;
+        return character;
       }
 
-      const newPost = post.title.toLowerCase().includes(keyword.toLowerCase());
+      const newCharacter = character.name
+        .toLowerCase()
+        .includes(keyword.toLowerCase());
 
-      return newPost;
+      return newCharacter;
     });
 
-    setPosts(filteredPosts);
+    setCharacters(filteredCharacters);
   };
 
   return (
@@ -32,9 +36,9 @@ const App = () => {
       <Search
         keyword={keyword}
         setKeyword={setKeyword}
-        filterPosts={filterPosts}
+        filterCharacters={filterCharacters}
       />
-      <ListPosts posts={posts} />
+      <ListCharacters characters={characters} />
     </div>
   );
 };

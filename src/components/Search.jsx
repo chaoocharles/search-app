@@ -1,18 +1,18 @@
 import React from "react";
 
-const Search = ({ keyword, setKeyword, filterPosts }) => {
+const Search = ({ keyword, setKeyword, filterCharacters }) => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     setKeyword(keyword);
-    filterPosts();
+    filterCharacters();
   };
   return (
     <div className="search">
-      <h3>Search</h3>
       <form onSubmit={handleSearchSubmit}>
         <input
           type="search"
           id="search-box"
+          placeholder="search characters by name"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
         />
